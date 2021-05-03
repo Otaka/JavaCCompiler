@@ -1,5 +1,7 @@
 package com.javaccompiler;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +22,20 @@ public class Compiler {
         result.println("global start");
         result.println("section .text");
         result.println("start:");
-        result.println("  mov eax, " + Integer.parseInt(source));
+
+        String[] tokens = StringUtils.splitByCharacterType(source);
+        result.println("  mov rax, " + Integer.parseInt(tokens[0]));
+        for (int i = 1; i < tokens.length; i += 2) {
+            String tokenOperation = tokens[i];
+            if (tokenOperation.equals("+")) {
+                result.println("  add rax, " + Integer.parseInt(tokens[i + 1]));
+            } else if (tokenOperation.equals("-")) {
+                result.println("  sub rax, " + Integer.parseInt(tokens[i + 1]));
+            } else {
+                throw new IllegalArgumentException("Unexpected token [" + tokenOperation + "]");
+            }
+        }
+
         result.println("  ret");
 
         result.flush();
