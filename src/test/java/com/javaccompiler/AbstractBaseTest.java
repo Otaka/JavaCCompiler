@@ -13,7 +13,6 @@ public class AbstractBaseTest {
     @TempDir
     File tempDirectory;
 
-
     public void testSourceStringCompilation(String string, int expectedExitCode) throws IOException {
         File outputFile = new File(tempDirectory, "test.exe");
         Compiler compiler = new Compiler();
